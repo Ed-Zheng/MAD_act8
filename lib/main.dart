@@ -22,7 +22,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FadingTextAnimation(toggleTheme: _toggleTheme),
+      home: PageView(
+        children: [
+          FadingTextAnimation(toggleTheme: _toggleTheme),
+          SecondFadingAnimation(toggleTheme: _toggleTheme),
+        ],
+      ),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 73, 176, 255),
@@ -107,6 +112,29 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
       floatingActionButton: FloatingActionButton(
         onPressed: toggleVisibility,
         child: Icon(Icons.play_arrow),
+      ),
+    );
+  }
+}
+
+class SecondFadingAnimation extends StatelessWidget {
+  final VoidCallback toggleTheme;
+  const SecondFadingAnimation({super.key, required this.toggleTheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Page'),
+        actions: [
+          IconButton(
+            onPressed: toggleTheme,
+            icon: const Icon(Icons.brightness_6),
+          ),
+        ],
+      ),
+      body: const Center(
+        // Add a image here that rotates and has a border
       ),
     );
   }
