@@ -88,7 +88,13 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
         actions: [
           IconButton(
             onPressed: widget.toggleTheme, 
-            icon: Icon(Icons.brightness_6))
+            icon: Icon(Icons.brightness_6)
+            ),
+          IconButton(
+            tooltip: 'Pick color',
+            icon: const Icon(Icons.color_lens),
+            onPressed: _pickColor,
+          ),
         ],
       ),
       body: Center(
