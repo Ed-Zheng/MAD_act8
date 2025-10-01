@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,11 +43,41 @@ class FadingTextAnimation extends StatefulWidget {
 
 class _FadingTextAnimationState extends State<FadingTextAnimation> {
   bool _isVisible = true;
+  Color textColor = Colors.black;
 
   void toggleVisibility() {
     setState(() {
       _isVisible = !_isVisible;
     });
+  }
+
+  void _pickColor() {
+    Color temp = textColor;
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Pick a color'),
+        content: SingleChildScrollView(
+          child: ColorPicker(
+            pickerColor: temp,
+            onColorChanged: (c) => temp = c,
+            labelTypes: const [],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), 
+            child: const Text('Cancel')),
+          TextButton(
+            onPressed: () {
+              setState(() => textColor = temp);
+              Navigator.pop(context);
+            },
+            child: const Text('Use'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -64,10 +95,7 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
         child: AnimatedOpacity(
           opacity: _isVisible ? 1.0 : 0.0,
           duration: Duration(seconds: 1),
-          child: Text(
-            'Hello, Flutter!',
-            style: TextStyle(fontSize: 24),
-          ),
+          child: Text('Hello, Flutter!', style: TextStyle(fontSize: 24, color: textColor)),
         ),
       ),
       floatingActionButton: FloatingActionButton(
