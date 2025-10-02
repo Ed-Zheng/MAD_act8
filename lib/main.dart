@@ -15,7 +15,7 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleTheme() {
     setState(() {
-      _darkMode = !_darkMode; // flip theme
+      _darkMode = !_darkMode;
     });
   }
 
@@ -117,24 +117,66 @@ class _FadingTextAnimationState extends State<FadingTextAnimation> {
   }
 }
 
-class SecondFadingAnimation extends StatelessWidget {
+class SecondFadingAnimation extends StatefulWidget {
   final VoidCallback toggleTheme;
   const SecondFadingAnimation({super.key, required this.toggleTheme});
 
   @override
+  State<SecondFadingAnimation> createState() => _SecondFadingAnimationState();
+}
+
+class _SecondFadingAnimationState extends State<SecondFadingAnimation>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final borderColor = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Second Page'),
         actions: [
           IconButton(
-            onPressed: toggleTheme,
+            onPressed: widget.toggleTheme,
             icon: const Icon(Icons.brightness_6),
           ),
         ],
       ),
-      body: const Center(
-        // Add a image here that rotates and has a border
+      body: Center(
+        child: RotationTransition(
+          turns: _controller,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(color: borderColor, width: 3),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/image1.png',
+                width: 220,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
